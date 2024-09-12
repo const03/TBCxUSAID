@@ -31,14 +31,16 @@ class DataRetriever:
             data = response.json()
 
             with self.lock:
-                dumps = json.dumps(data, indent=INDENT).replace("\n", "\n  ")
-                self.write(INDENT + dumps)
+                formatted_data = json.dumps(data, indent=INDENT).replace("\n", "\n  ")
+                formatted_data = INDENT + formatted_data
 
                 if self.counter != self.number_of_posts - 1:
                     self.counter += 1
-                    self.write(",\n")
+                    formatted_data += ",\n"
                 else:
-                    self.write("\n")
+                    formatted_data += "\n"
+
+                self.write(formatted_data)
         else:
             print(f"Error: {response.status_code}")
 
