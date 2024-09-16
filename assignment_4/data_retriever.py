@@ -41,5 +41,7 @@ class DataRetriever:
 
     async def fetch_all_urls(self) -> None:
         async with ClientSession() as session:
+            tasks = []
             for url in self.urls:
-                await self.fetch_url(session, url)
+                tasks.append(asyncio.create_task(self.fetch_url(session, url)))
+            await asyncio.gather(*tasks)
